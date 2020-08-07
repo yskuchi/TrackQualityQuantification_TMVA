@@ -10,12 +10,23 @@ Author: Yusuke Uchiyama
    * ROOT interpreter (CLING)
 
 ## Procedure ##
-1. Make dataset files with `TrackQualificationDataset.cpp`.
+1. Make dataset files with `TrackQualificationDataset.cpp`. Move `TrackQualificationInput.root` here.
 2. Train models, evaluate the performance, and select a model with 'TrackQualificationClassifier.cpp'
     or 'TrackQualificationCrossValidation.cpp.
 3. Apply the model to data
 
+```console
+$ cd $MEG2SYS/analyzer
+$ ./meganalyzer -I path/to/track_qualification_TMVA/TrackQualificationDataset.cpp
+or
+$ ./meganalyzer -I '../../track_qualification_TMVA/TrackQualificationDataset.cpp+'
+```
 
+```console
+$ root  ./TrackQualificationClassification.cpp | tee TrackQualificationClassification.log
+or
+$ root './TrackQualificationClassification.cpp("BDT")' | tee TrackQualificationClassification.log
+```
 
 ### Input variables ###
 

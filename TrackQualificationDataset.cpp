@@ -52,7 +52,7 @@ void TrackQualificationDataset()
   and classification.
 
   Usage:
-  - your setup should be written in macros/positron/setting.h
+  - your setup should be written in $MEG2SYS/analyzer/macros/positron/setting.h
   - cd $MEG2SYS/analyzer
   - ./meganalyzer -I path/to/track_qualification_TMVA/TrackQualificationDataset.cpp
   -  or
