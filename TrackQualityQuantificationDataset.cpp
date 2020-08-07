@@ -42,21 +42,21 @@ vector<Bool_t> AND(vector<Bool_t> &a, vector<Bool_t> &b)
 }
 
 //______________________________________________________________________________
-void TrackQualificationDataset() 
+void TrackQualityQuantificationDataset() 
 {
 /*
   This macro make a tree file to be used to define the track-qualification variable
 
-  The output ROOT file TrackQualificationInput.root contains a tree 'reg', 'treeGood', and 
+  The output ROOT file TrackQualityQuantificationInput.root contains a tree 'reg', 'treeGood', and 
   'treeBad' that contain input variables and the target variables for the regression
   and classification.
 
   Usage:
   - your setup should be written in $MEG2SYS/analyzer/macros/positron/setting.h
   - cd $MEG2SYS/analyzer
-  - ./meganalyzer -I path/to/track_qualification_TMVA/TrackQualificationDataset.cpp
+  - ./meganalyzer -I path/to/track_qualification_TMVA/TrackQualityQuantificationDataset.cpp
   -  or
-  - ./meganalyzer -I '../../track_qualification_TMVA/TrackQualificationDataset.cpp+'
+  - ./meganalyzer -I '../../track_qualification_TMVA/TrackQualityQuantificationDataset.cpp+'
   - rec/sim files should include signal events.
 
 */
@@ -93,7 +93,7 @@ void TrackQualificationDataset()
 
 
    // Output tree file
-   TFile output("TrackQualificationInput.root", "RECREATE", "TrackQualification outputs");
+   TFile output("TrackQualityQuantificationInput.root", "RECREATE", "TrackQualityQuantification outputs");
 
    // Output tree
    TTree *outputTree = new TTree("reg", "Tree for regression");

@@ -17,14 +17,14 @@
 #include "TMVA/CrossValidation.h"
 
 using namespace TMVA;
-int TrackQualificationClassification( TString myMethodList = "" )
+int TrackQualityQuantificationClassification( TString myMethodList = "" )
 {
    // The explicit loading of the shared libTMVA is done in TMVAlogon.C, defined in .rootrc
    // if you use your private .rootrc, or run from a different directory, please copy the
    // corresponding lines from .rootrc
    // methods to be processed can be given as an argument; use format:
    //
-   //     mylinux~> root  macros/positron/TrackQualificationClassification.cpp
+   //     mylinux~> root  macros/positron/TrackQualityQuantificationClassification.cpp
    //
    //---------------------------------------------------------------
 
@@ -117,7 +117,7 @@ int TrackQualificationClassification( TString myMethodList = "" )
    // Here the preparation phase begins
 
    // Create a new root output file
-   TString outfileName( "TrackQualificationClassification.root" );
+   TString outfileName( "TrackQualityQuantificationClassification.root" );
    TFile* outputFile = TFile::Open( outfileName, "RECREATE" );
    // Create the factory object. Later you can choose the methods
    // whose performance you'd like to investigate. The factory will
@@ -129,9 +129,9 @@ int TrackQualificationClassification( TString myMethodList = "" )
    // The second argument is the output file for the training results
    // All TMVA output can be suppressed by removing the "!" (not) in
    // front of the "Silent" argument in the option string
-   TMVA::Factory *factory = new TMVA::Factory( "TrackQualificationClassification", outputFile,
+   TMVA::Factory *factory = new TMVA::Factory( "TrackQualityQuantificationClassification", outputFile,
                                                "!V:!Silent:Color:DrawProgressBar:"
-                                               "Transformations=I;D;P;G,D:"
+                                               // "Transformations=I;D;P;G,D:"
                                                "AnalysisType=Classification" );
 
    TMVA::DataLoader *dataloader=new TMVA::DataLoader("dataset");
@@ -146,7 +146,7 @@ int TrackQualificationClassification( TString myMethodList = "" )
    dataloader->AddVariable( "ngoodhits", "Number of good DCHHits", "", 'I' );
    dataloader->AddVariable( "redChi2", "Chi2/NDF of DCH tracking", "", 'F' );
    dataloader->AddVariable( "EPositronUncert", "Uncertainty E", "GeV", 'F' );
-   // dataloader->AddVariable( "ThetaPositronUncert", "Uncertainty theta", "degree", 'F' );
+   dataloader->AddVariable( "ThetaPositronUncert", "Uncertainty theta", "degree", 'F' );
    dataloader->AddVariable( "PhiPositronUncert", "Uncertainty phi", "degree", 'F' );
    dataloader->AddVariable( "extrapolationLengthTarget", "Length between target to 1st DCHHit", "cm", 'F' );
    dataloader->AddVariable( "extrapolationLengthSPX", "Length between last DCHHit to SPX", "cm", 'F' );
@@ -164,7 +164,7 @@ int TrackQualificationClassification( TString myMethodList = "" )
    // Read training and test data (see TMVAClassification for reading ASCII files)
    // load the signal and background event samples from ROOT trees
    TFile *input(0);
-   TString fname = "./TrackQualificationInput.root";
+   TString fname = "./TrackQualityQuantificationInput.root";
    if (!gSystem->AccessPathName( fname )) {
       input = TFile::Open( fname ); // check if file in local directory exists
    }
@@ -489,6 +489,6 @@ int main( int argc, char** argv )
       if (!methodList.IsNull()) methodList += TString(",");
       methodList += regMethod;
    }
-   TrackQualificationClassification(methodList);
+   TrackQualityQuantificationClassification(methodList);
    return 0;
 }

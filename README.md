@@ -1,5 +1,5 @@
-# track_qualification_TMVA
-Track qualification with TMVA 
+# TrackQualityQuantification_TMVA
+Quantify track quality with TMVA 
 
 Author: Yusuke Uchiyama
 
@@ -10,22 +10,23 @@ Author: Yusuke Uchiyama
    * ROOT interpreter (CLING)
 
 ## Procedure ##
-1. Make dataset files with `TrackQualificationDataset.cpp`. Move `TrackQualificationInput.root` here.
-2. Train models, evaluate the performance, and select a model with 'TrackQualificationClassifier.cpp'
-    or 'TrackQualificationCrossValidation.cpp.
+1. Make dataset files with `TrackQualityQuantificationDataset.cpp`. Move `TrackQualityQuantificationInput.root` here.
+2. Train models, evaluate the performance, tune hyper-parameters, and select a model 
+   with `TrackQualityQuantificationClassifier.cpp`
+    or `TrackQualityQuantificationCrossValidation.cpp`.
 3. Apply the model to data
 
 ```console
 $ cd $MEG2SYS/analyzer
-$ ./meganalyzer -I path/to/track_qualification_TMVA/TrackQualificationDataset.cpp
+$ ./meganalyzer -I path/to/track_qualification_TMVA/TrackQualityQuantificationDataset.cpp
 or
-$ ./meganalyzer -I '../../track_qualification_TMVA/TrackQualificationDataset.cpp+'
+$ ./meganalyzer -I '../../track_qualification_TMVA/TrackQualityQuantificationDataset.cpp+'
 ```
 
 ```console
-$ root  ./TrackQualificationClassification.cpp | tee TrackQualificationClassification.log
+$ root  ./TrackQualityQuantificationClassification.cpp | tee TrackQualityQuantificationClassification.log
 or
-$ root './TrackQualificationClassification.cpp("BDT")' | tee TrackQualificationClassification.log
+$ root './TrackQualityQuantificationClassification.cpp("BDT")' | tee TrackQualityQuantificationClassification.log
 ```
 
 ### Input variables ###
@@ -41,4 +42,11 @@ $ root './TrackQualificationClassification.cpp("BDT")' | tee TrackQualificationC
 * `matchingDT`: The time difference between CDCH track and SPX track (s). 
 * `matchingChi2`: The chisquare of CDCH-SPX matching.
 
+## Qualification with classification methods ##
+Use classifiers to qualify the track
+
+
+## Notes ##
+
+### Aug. 2020 ###
 
