@@ -313,7 +313,7 @@ void TrackQualityQuantificationApplication( TString myMethodList = "" )
       theTree->GetEntry(ievt);
 
       ngoodhitsF = static_cast<Float_t>(ngoodhits);
-      nSPXHitsF  = static_cast<Float_t>(nSPXHitsF);
+      nSPXHitsF  = static_cast<Float_t>(nSPXHits);
 
       // Return the MVA outputs and fill into histograms
 
