@@ -64,7 +64,10 @@ The 'bad' track is defined as a track satisfying a loose track selection (at lea
 Use MC, signal e+ mixed to 7e7 Michel e+, with a sample of 40k events for training and testing.
 17282 'good track' samples and 4211 'bad track' samples.
 
+![](fig/rejBvsS.png "ROC curves")
+
 Cross validation
+![](fig/rejBvsS_BDT_crossvalidation.png "Cross validation")
 ```
 Summary for method BDT
         Fold 0: ROC int: 0.867373, BkgEff@SigEff=0.3: 0.879
