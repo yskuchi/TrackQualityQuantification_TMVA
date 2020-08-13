@@ -194,9 +194,21 @@ int TrackQualityQuantificationClassification( TString myMethodList = "" )
    TCut mycutb = ""; // for example: TCut mycutb = "abs(var1)<0.5";
  
    // tell the DataLoader to use all remaining events in the trees after training for testing:
-   dataloader->PrepareTrainingAndTestTree( mycuts, mycutb,
-                                         "nTrain_Signal=0:nTest_Background=0"
-                                           ":SplitMode=Random:NormMode=NumEvents:!V" );
+   // dataloader->PrepareTrainingAndTestTree( mycuts, mycutb,
+   //                                       "nTrain_Signal=0:nTest_Background=0"
+   //                                         ":SplitMode=Random:NormMode=NumEvents:!V" );
+
+   Int_t nsig = t_sig->GetEntries();
+   Int_t nbkg = t_bkg->GetEntries();
+   Float_t fTest = 0.1;
+   Int_t nTest_Signal = nsig * fTest;
+   Int_t nTest_Background = nbkg * fTest;
+   dataloader->PrepareTrainingAndTestTree( mycuts, mycutb, Form(
+                                         "nTest_Signal=%d:nTest_Background=%d"
+                                         ":SplitMode=Random:NormMode=NumEvents:!V",
+                                         nTest_Signal, nTest_Background) );
+  
+
    //
    //     dataloader->PrepareTrainingAndTestTree( mycut,
    //            "nTrain_Regression=0:nTest_Regression=0:SplitMode=Random:NormMode=NumEvents:!V" );
@@ -412,11 +424,14 @@ int TrackQualityQuantificationClassification( TString myMethodList = "" )
                            "UseBaggedBoost:BaggedSampleFraction=0.5:nCuts=20:MaxDepth=2" );
 
    if (Use["BDT"]) { // Adaptive Boost
-      factory->BookMethod( dataloader, TMVA::Types::kBDT, "BDT",
+      auto method = factory->BookMethod( dataloader, TMVA::Types::kBDT, "BDT",
                            "!H:!V:NTrees=850:MinNodeSize=2.5%:MaxDepth=3:"
                            "BoostType=AdaBoost:AdaBoostBeta=0.5:"
                            "UseBaggedBoost:BaggedSampleFraction=0.5:"
                            "SeparationType=GiniIndex:nCuts=20" );
+      // cout<<"===================== Hyperparameter optimization ==============================="<<endl;
+      // method->OptimizeTuningParameters();
+      // cout<<"===================== Hyperparameter optimization done ==============================="<<endl;
    }
 
    if (Use["BDTB"]) // Bagging

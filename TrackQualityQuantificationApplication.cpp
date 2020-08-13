@@ -19,6 +19,7 @@ using namespace TMVA;
 
 void TrackQualityQuantificationApplication( TString myMethodList = "" )
 {
+   // root './TrackQualityQuantificationApplication.cpp("BDT")'
 
    //---------------------------------------------------------------
    // This loads the library
@@ -120,34 +121,44 @@ void TrackQualityQuantificationApplication( TString myMethodList = "" )
 
    // Create the Reader object
 
-   TMVA::Reader *reader = new TMVA::Reader( "!Color:!Silent" );
+   TMVA::Reader *reader = new TMVA::Reader( "!Color:!Silent:!V" );
 
    // Create a set of variables and declare them to the reader
    // - the variable names MUST corresponds in name and type to those given in the weight file(s) used
-   Float_t var1, var2;
-   Float_t var3, var4;
-   reader->AddVariable( "myvar1 := var1+var2", &var1 );
-   reader->AddVariable( "myvar2 := var1-var2", &var2 );
-   reader->AddVariable( "var3",                &var3 );
-   reader->AddVariable( "var4",                &var4 );
+   Float_t redChi2, EPositronUncert, ThetaPositronUncert, PhiPositronUncert;
+   Float_t ngoodhitsF, nSPXHitsF; // use Float_t for all the variables
+   Float_t extrapolationLengthTarget, extrapolationLengthSPX, matchingChi2, matchingDT;
+   reader->AddVariable( "ngoodhits",                 &ngoodhitsF);
+   reader->AddVariable( "redChi2",                   &redChi2);
+   reader->AddVariable( "EPositronUncert",           &EPositronUncert);
+   reader->AddVariable( "ThetaPositronUncert",       &ThetaPositronUncert);
+   reader->AddVariable( "PhiPositronUncert",         &PhiPositronUncert);
+   reader->AddVariable( "extrapolationLengthTarget", &extrapolationLengthTarget);
+   reader->AddVariable( "extrapolationLengthSPX",    &extrapolationLengthSPX);
+   reader->AddVariable( "nSPXHits",                  &nSPXHitsF);
+   reader->AddVariable( "matchingChi2",              &matchingChi2);
+   reader->AddVariable( "matchingDT",                &matchingDT);
 
    // Spectator variables declared in the training have to be added to the reader, too
-   Float_t spec1,spec2;
-   reader->AddSpectator( "spec1 := var1*2",   &spec1 );
-   reader->AddSpectator( "spec2 := var1*3",   &spec2 );
+   // Float_t spec1,spec2;
+   // reader->AddSpectator( "spec1 := var1*2",   &spec1 );
+   // reader->AddSpectator( "spec2 := var1*3",   &spec2 );
 
-   Float_t Category_cat1, Category_cat2, Category_cat3;
-   if (Use["Category"]){
-      // Add artificial spectators for distinguishing categories
-      reader->AddSpectator( "Category_cat1 := var3<=0",             &Category_cat1 );
-      reader->AddSpectator( "Category_cat2 := (var3>0)&&(var4<0)",  &Category_cat2 );
-      reader->AddSpectator( "Category_cat3 := (var3>0)&&(var4>=0)", &Category_cat3 );
-   }
+   // Float_t Category_cat1, Category_cat2, Category_cat3;
+   // if (Use["Category"]){
+   //    // Add artificial spectators for distinguishing categories
+   //    reader->AddSpectator( "Category_cat1 := var3<=0",             &Category_cat1 );
+   //    reader->AddSpectator( "Category_cat2 := (var3>0)&&(var4<0)",  &Category_cat2 );
+   //    reader->AddSpectator( "Category_cat3 := (var3>0)&&(var4>=0)", &Category_cat3 );
+   // }
+
 
    // Book the MVA methods
 
    TString dir    = "dataset/weights/";
    TString prefix = "TrackQualityQuantification";
+   prefix += "Classification";
+   //prefix += "CrossValidation";
 
    // Book method(s)
    for (std::map<std::string,int>::iterator it = Use.begin(); it != Use.end(); it++) {
@@ -252,13 +263,9 @@ void TrackQualityQuantificationApplication( TString myMethodList = "" )
    // we'll later on use only the "signal" events for the test in this example.
    //
    TFile *input(0);
-   TString fname = "./tmva_class_example.root";
+   TString fname = "./TrackQualityQuantificationInput.root";
    if (!gSystem->AccessPathName( fname )) {
       input = TFile::Open( fname ); // check if file in local directory exists
-   }
-   else {
-      TFile::SetCacheFileDir(".");
-      input = TFile::Open("http://root.cern.ch/files/tmva_class_example.root", "CACHEREAD"); // if not: download from ROOT server
    }
    if (!input) {
       std::cout << "ERROR: could not open data file" << std::endl;
@@ -274,12 +281,21 @@ void TrackQualityQuantificationApplication( TString myMethodList = "" )
    //   but of course you can use different ones and copy the values inside the event loop
    //
    std::cout << "--- Select signal sample" << std::endl;
-   TTree* theTree = (TTree*)input->Get("TreeS");
-   Float_t userVar1, userVar2;
-   theTree->SetBranchAddress( "var1", &userVar1 );
-   theTree->SetBranchAddress( "var2", &userVar2 );
-   theTree->SetBranchAddress( "var3", &var3 );
-   theTree->SetBranchAddress( "var4", &var4 );
+   // TTree* theTree = (TTree*)input->Get("reg");
+   // TTree* theTree = (TTree*)input->Get("treeBad");
+   TTree* theTree = (TTree*)input->Get("treeGood");
+   UShort_t ngoodhits, nSPXHits; 
+
+   theTree->SetBranchAddress( "ngoodhits", &ngoodhits );
+   theTree->SetBranchAddress( "redChi2", &redChi2 );
+   theTree->SetBranchAddress( "EPositronUncert", &EPositronUncert );
+   theTree->SetBranchAddress( "ThetaPositronUncert", &ThetaPositronUncert );
+   theTree->SetBranchAddress( "PhiPositronUncert", &PhiPositronUncert );
+   theTree->SetBranchAddress( "extrapolationLengthTarget", &extrapolationLengthTarget );
+   theTree->SetBranchAddress( "extrapolationLengthSPX", &extrapolationLengthSPX );
+   theTree->SetBranchAddress( "nSPXHits", &nSPXHits );
+   theTree->SetBranchAddress( "matchingDT", &matchingDT );
+   theTree->SetBranchAddress( "matchingChi2", &matchingChi2 );
 
    // Efficiency calculator for cut method
    Int_t    nSelCutsGA = 0;
@@ -296,8 +312,8 @@ void TrackQualityQuantificationApplication( TString myMethodList = "" )
 
       theTree->GetEntry(ievt);
 
-      var1 = userVar1 + userVar2;
-      var2 = userVar1 - userVar2;
+      ngoodhitsF = static_cast<Float_t>(ngoodhits);
+      nSPXHitsF  = static_cast<Float_t>(nSPXHitsF);
 
       // Return the MVA outputs and fill into histograms
 

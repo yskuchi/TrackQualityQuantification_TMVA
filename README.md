@@ -14,7 +14,7 @@ Author: Yusuke Uchiyama
 2. Train models, evaluate the performance, tune hyper-parameters, and select a model 
    with `TrackQualityQuantificationClassifier.cpp`
     or `TrackQualityQuantificationCrossValidation.cpp`.
-3. Apply the model to data
+3. Apply the model to data. An example is `TrackQualityQuantificationApplication.cpp`.
 
 ```console
 $ cd $MEG2SYS/analyzer
@@ -29,7 +29,12 @@ or
 $ root './TrackQualityQuantificationClassification.cpp("BDT")' | tee TrackQualityQuantificationClassification.log
 ```
 
-### Input variables ###
+```console
+$ root './TrackQualityQuantificationApplication.cpp("BDT")'
+```
+
+
+## Input variables ##
 
 * `ngoodhits`: The number of good hits used in CDCH track fit.
 * `redChi2`: The reduced chisquare of the CDCH track fit.
@@ -67,3 +72,9 @@ Summary for method BDT
         Fold 2: ROC int: 0.857859, BkgEff@SigEff=0.3: 0.887
         Fold 3: ROC int: 0.866336, BkgEff@SigEff=0.3: 0.887
 ```
+We can check the robustness of model with the cross validation.
+e.g if the k ROC-curves from the k-fold cross validation show large variation, then the model
+is not stable; you should choose other models.
+
+Tried hyper-parameter tuning with TMVA::HyperParameterOptimisation class and method->OptimizeTuningParameters()
+but none of them worked well.
