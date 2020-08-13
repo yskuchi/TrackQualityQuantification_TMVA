@@ -68,7 +68,7 @@ Use MC, signal e+ mixed to 7e7 Michel e+, with a sample of 40k events for traini
 17282 'good track' samples and 4211 'bad track' samples.
 
 ![](fig/rejBvsS.png "ROC curves")
-![](fig/overtrain_BDT.png.png "BDT output")
+![](fig/overtrain_BDT.png "BDT output")  
 This is trained and tested with 50:50 samples with AdaBoost BDT.
 
 Cross validation
