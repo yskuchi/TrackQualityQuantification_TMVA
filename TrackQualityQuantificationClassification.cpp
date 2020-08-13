@@ -200,7 +200,7 @@ int TrackQualityQuantificationClassification( TString myMethodList = "" )
 
    Int_t nsig = t_sig->GetEntries();
    Int_t nbkg = t_bkg->GetEntries();
-   Float_t fTest = 0.1;
+   Float_t fTest = 0.5;
    Int_t nTest_Signal = nsig * fTest;
    Int_t nTest_Background = nbkg * fTest;
    dataloader->PrepareTrainingAndTestTree( mycuts, mycutb, Form(

@@ -47,6 +47,9 @@ $ root './TrackQualityQuantificationApplication.cpp("BDT")'
 * `matchingDT`: The time difference between CDCH track and SPX track (s). 
 * `matchingChi2`: The chisquare of CDCH-SPX matching.
 
+![](fig/variables_id_c1.png "Input variable 1")
+![](fig/variables_id_c2.png "Input variable 2")
+
 ## Quantification with classification methods ##
 Use classifiers to quantify the track quality.
 The classifiers are trained to separate 'good track' and 'bad track'.
@@ -65,8 +68,11 @@ Use MC, signal e+ mixed to 7e7 Michel e+, with a sample of 40k events for traini
 17282 'good track' samples and 4211 'bad track' samples.
 
 ![](fig/rejBvsS.png "ROC curves")
+![](fig/overtrain_BDT.png.png "BDT output")
+This is trained and tested with 50:50 samples with AdaBoost BDT.
 
 Cross validation
+
 ![](fig/rejBvsS_BDT_crossvalidation.png "Cross validation")
 ```
 Summary for method BDT
