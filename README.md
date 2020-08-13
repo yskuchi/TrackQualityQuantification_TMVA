@@ -42,11 +42,28 @@ $ root './TrackQualityQuantificationClassification.cpp("BDT")' | tee TrackQualit
 * `matchingDT`: The time difference between CDCH track and SPX track (s). 
 * `matchingChi2`: The chisquare of CDCH-SPX matching.
 
-## Qualification with classification methods ##
-Use classifiers to qualify the track
+## Quantification with classification methods ##
+Use classifiers to quantify the track quality.
+The classifiers are trained to separate 'good track' and 'bad track'.
+Note that we do not intend to distinguish them but to quantify the quality of tracks by using the output of the classifiers.
+
+The 'good' track is defined as a track satisfying the track selection and falling into the 5-sigma window 
+(in EPositron, ThetaPositron, PhiPositron, YPositron, ZPositron, and TPositron).
+
+The 'bad' track is defined as a track satisfying a loose track selection (at least successfully propagated to both target and SPX) but not falling into the 5-sigma window.
 
 
 ## Notes ##
 
 ### Aug. 2020 ###
+Use MC, signal e+ mixed to 7e7 Michel e+, with a sample of 40k events for training and testing.
+17282 'good track' samples and 4211 'bad track' samples.
 
+Cross validation
+```
+Summary for method BDT
+        Fold 0: ROC int: 0.867373, BkgEff@SigEff=0.3: 0.879
+        Fold 1: ROC int: 0.873474, BkgEff@SigEff=0.3: 0.903
+        Fold 2: ROC int: 0.857859, BkgEff@SigEff=0.3: 0.887
+        Fold 3: ROC int: 0.866336, BkgEff@SigEff=0.3: 0.887
+```

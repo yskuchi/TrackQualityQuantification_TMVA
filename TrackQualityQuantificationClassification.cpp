@@ -301,7 +301,8 @@ int TrackQualityQuantificationClassification( TString myMethodList = "" )
 
    // Linear discriminant (same as Fisher discriminant)
    if (Use["LD"])
-      factory->BookMethod( dataloader, TMVA::Types::kLD, "LD", "H:!V:VarTransform=None:"
+      factory->BookMethod( dataloader, TMVA::Types::kLD, "LD", "H:!V:"
+                           "VarTransform=None:"
                            "CreateMVAPdfs:PDFInterpolMVAPdf=Spline2:NbinsMVAPdf=50:NsmoothMVAPdf=10" );
 
    // Fisher discriminant (same as LD)
@@ -406,13 +407,15 @@ int TrackQualityQuantificationClassification( TString myMethodList = "" )
    // Boosted Decision Trees
    if (Use["BDTG"]) // Gradient Boost
       factory->BookMethod( dataloader, TMVA::Types::kBDT, "BDTG",
-                           "!H:!V:NTrees=1000:MinNodeSize=2.5%:BoostType=Grad:Shrinkage=0.10:"
+                           "!H:!V:NTrees=1000:MinNodeSize=2.5%:"
+                           "BoostType=Grad:Shrinkage=0.10:"
                            "UseBaggedBoost:BaggedSampleFraction=0.5:nCuts=20:MaxDepth=2" );
 
    if (Use["BDT"]) { // Adaptive Boost
       factory->BookMethod( dataloader, TMVA::Types::kBDT, "BDT",
                            "!H:!V:NTrees=850:MinNodeSize=2.5%:MaxDepth=3:"
-                           "BoostType=AdaBoost:AdaBoostBeta=0.5:UseBaggedBoost:BaggedSampleFraction=0.5:"
+                           "BoostType=AdaBoost:AdaBoostBeta=0.5:"
+                           "UseBaggedBoost:BaggedSampleFraction=0.5:"
                            "SeparationType=GiniIndex:nCuts=20" );
    }
 
@@ -423,7 +426,8 @@ int TrackQualityQuantificationClassification( TString myMethodList = "" )
    if (Use["BDTD"]) // Decorrelation + Adaptive Boost
       factory->BookMethod( dataloader, TMVA::Types::kBDT, "BDTD",
                            "!H:!V:NTrees=400:MinNodeSize=5%:MaxDepth=3:"
-                           "BoostType=AdaBoost:SeparationType=GiniIndex:nCuts=20:VarTransform=Decorrelate" );
+                           "BoostType=AdaBoost:SeparationType=GiniIndex:nCuts=20:"
+                           "VarTransform=Decorrelate" );
 
    if (Use["BDTF"])  // Allow Using Fisher discriminant in node splitting for (strong) linearly correlated variables
       factory->BookMethod( dataloader, TMVA::Types::kBDT, "BDTF",
