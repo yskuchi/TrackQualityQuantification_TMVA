@@ -9,6 +9,19 @@ Author: Yusuke Uchiyama
    * TMVA
    * ROOT interpreter (CLING)
 
+## Quantification with classification methods ##
+Use classifiers to quantify the track quality.
+The classifiers are trained to separate 'good track' and 'bad track'.
+Note that we do not intend to distinguish them but to quantify the quality of tracks by using the output of the classifiers.
+
+The 'good' track is defined as a track satisfying the track selection and falling into the 5-sigma window 
+(in EPositron, ThetaPositron, PhiPositron, YPositron, ZPositron, and TPositron).
+
+The 'bad' track is defined as a track satisfying a loose track selection (at least successfully propagated to both target and SPX) but not falling into the 5-sigma window.
+
+The output variable is used to compare and rank tracks.
+It could be used to apply a cut or to categorize the tracks.
+
 ## Procedure ##
 1. Make dataset files with `TrackQualityQuantificationDataset.cpp`. 
    Move `TrackQualityQuantificationInput.root` here.
@@ -51,16 +64,6 @@ $ root './TrackQualityQuantificationApplication.cpp("BDT")'
 
 ![](fig/variables_id_c1.png "Input variable 1")
 ![](fig/variables_id_c2.png "Input variable 2")
-
-## Quantification with classification methods ##
-Use classifiers to quantify the track quality.
-The classifiers are trained to separate 'good track' and 'bad track'.
-Note that we do not intend to distinguish them but to quantify the quality of tracks by using the output of the classifiers.
-
-The 'good' track is defined as a track satisfying the track selection and falling into the 5-sigma window 
-(in EPositron, ThetaPositron, PhiPositron, YPositron, ZPositron, and TPositron).
-
-The 'bad' track is defined as a track satisfying a loose track selection (at least successfully propagated to both target and SPX) but not falling into the 5-sigma window.
 
 ## Analyze the trained data ##
 When you train data (with  `TrackQualityQuantificationClassifier.cpp`
@@ -148,22 +151,6 @@ Use MC, signal e+ mixed to 7e7 Michel e+, with a sample of 40k events for traini
 ![](fig/overtrain_BDT.png "BDT output")  
 This is trained and tested with 50:50 samples with AdaBoost BDT.
 
-Cross validation
-
-![](fig/rejBvsS_BDT_crossvalidation.png "Cross validation")
-```
-Summary for method BDT
-        Fold 0: ROC int: 0.867373, BkgEff@SigEff=0.3: 0.879
-        Fold 1: ROC int: 0.873474, BkgEff@SigEff=0.3: 0.903
-        Fold 2: ROC int: 0.857859, BkgEff@SigEff=0.3: 0.887
-        Fold 3: ROC int: 0.866336, BkgEff@SigEff=0.3: 0.887
-```
-We can check the robustness of model with the cross validation.
-e.g if the k ROC-curves from the k-fold cross validation show large variation, then the model
-is not stable; you should choose other models.
-
-Tried hyper-parameter tuning with TMVA::HyperParameterOptimisation class and method->OptimizeTuningParameters()
-but none of them worked well.
 
 ```
 LD                       : Results for LD coefficients:
@@ -229,3 +216,20 @@ BDT                      : Ranking result (top variable is best ranked)
                          : dataset              SVM            : 0.017 (0.031)       0.301 (0.321)      0.763 (0.794)
                          : -------------------------------------------------------------------------------------------------------------------
 ```
+
+Cross validation
+
+![](fig/rejBvsS_BDT_crossvalidation.png "Cross validation")
+```
+Summary for method BDT
+        Fold 0: ROC int: 0.867373, BkgEff@SigEff=0.3: 0.879
+        Fold 1: ROC int: 0.873474, BkgEff@SigEff=0.3: 0.903
+        Fold 2: ROC int: 0.857859, BkgEff@SigEff=0.3: 0.887
+        Fold 3: ROC int: 0.866336, BkgEff@SigEff=0.3: 0.887
+```
+We can check the robustness of model with the cross validation.
+e.g if the k ROC-curves from the k-fold cross validation show large variation, then the model
+is not stable; you should choose other models.
+
+Tried hyper-parameter tuning with TMVA::HyperParameterOptimisation class and method->OptimizeTuningParameters()
+but none of them worked well.
