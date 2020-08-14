@@ -60,6 +60,53 @@ The 'good' track is defined as a track satisfying the track selection and fallin
 
 The 'bad' track is defined as a track satisfying a loose track selection (at least successfully propagated to both target and SPX) but not falling into the 5-sigma window.
 
+## Analyzer the trained data ##
+When you train data (with  `TrackQualityQuantificationClassifier.cpp`
+    or `TrackQualityQuantificationCrossValidation.cpp`)
+you will get an output ROOT file (`TrackQualityQuantificationClassification.root` etc.),
+which contains the dataset and results of the training.
+
+You can use the GUI to see the output.
+```
+$ root -e 'TMVA::TMVAGui("./TrackQualityQuantificationClassification.root")'
+```
+or 
+```
+$ root
+root[] TMVA::TMVAGui("./TrackQualityQuantificationClassification.root")
+```
+
+You can also access to the data with commands (or macro) like the following:
+```
+$ root ./TrackQualityQuantificationClassification.root
+root [0]
+Attaching file TrackQualityQuantificationClassification.root as _file0...
+(TFile *) 0x364aec0
+root [1] .ls
+TFile**         TrackQualityQuantificationClassification.root
+ TFile*         TrackQualityQuantificationClassification.root
+  KEY: TDirectoryFile   dataset;1       dataset
+root [2] dataset->cd()
+(bool) true
+root [3] .ls
+TDirectoryFile*         dataset dataset
+ KEY: TH2F      CorrelationMatrixS;1    Correlation Matrix (signal)
+ KEY: TH2F      CorrelationMatrixB;1    Correlation Matrix (background)
+ KEY: TDirectoryFile    InputVariables_Id;1     InputVariables_Id
+ KEY: TDirectoryFile    Method_BDT;1    Directory for all BDT methods
+ KEY: TTree     TestTree;1      TestTree
+ KEY: TTree     TrainTree;1     TrainTree
+root [4] CorrelationMatrixS->Draw("colz")
+
+root [5] TrainTree->Print()
+
+root [6] TrainTree->Draw("BDT", "classID==0")
+Info in <TCanvas::MakeDefCanvas>:  created default TCanvas with name c1
+(long long) 17110
+root [7] TrainTree->Draw("BDT", "classID==1", "same")
+(long long) 4169
+root [8] CorrelationMatrixS->Draw("colz")
+```
 
 ## Notes ##
 
